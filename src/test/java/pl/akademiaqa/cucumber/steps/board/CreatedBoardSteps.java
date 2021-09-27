@@ -2,11 +2,11 @@ package pl.akademiaqa.cucumber.steps.board;
 
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.restassured.internal.common.assertion.Assertion;
 import io.restassured.response.Response;
 import lombok.RequiredArgsConstructor;
 import org.assertj.core.api.Assertions;
 import pl.akademiaqa.api.trello.boards.CreateBoardRequest;
+import pl.akademiaqa.api.trello.boards.ReadBoardRequest;
 import pl.akademiaqa.handlers.api.RequestHandler;
 import pl.akademiaqa.url.TrelloUrl;
 
@@ -14,24 +14,33 @@ import pl.akademiaqa.url.TrelloUrl;
 public class CreatedBoardSteps {
 
     private final CreateBoardRequest createBoardRequest;
+    private final ReadBoardRequest readBoardRequest;
     private final RequestHandler requestHandler;
+
+    private String boardId;
 
     @When("I create new board")
     public void i_create_new_board() {
 
         requestHandler.setEndpoint(TrelloUrl.BOARDS);
-        requestHandler.addQueryParam("name", "THID IS NEW BOARD");
+        requestHandler.addQueryParam("name", "THIS IS NEW BOARD");
 
         Response response = createBoardRequest.createBoard(requestHandler);
-        Assertions.assertThat(response.getStatusCode()).isEqualTo(200);
+        boardId = response.getBody().jsonPath().getString("id");
 
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    @Then("I see created board on the list")
-    public void i_see_created_board_on_the_list() {
+    @Then("I can read created board details")
+    public void i_can_read_created_board_details() {
 
-        // request GET na /boards
-        //sprawdzenie czy board został dodany do listy
+        requestHandler.setEndpoint(TrelloUrl.BOARDS);
+        requestHandler.addPathParam("id", boardId);
+
+        Response response = readBoardRequest.readBoard(requestHandler);
+
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(200);
+        Assertions.assertThat(response.getBody().jsonPath().getString("name")).isEqualTo("THIS IS NEW BOARD");
 
     }
 }
