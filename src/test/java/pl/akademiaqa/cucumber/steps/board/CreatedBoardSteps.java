@@ -1,6 +1,7 @@
 package pl.akademiaqa.cucumber.steps.board;
 
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.HttpStatus;
@@ -20,6 +21,8 @@ public class CreatedBoardSteps {
     private final ResponseHandler responseHandler;
     private final Context context;
 
+    private Exception actualException;
+
 
     @When("I create new board")
     public void i_create_new_board() {
@@ -31,6 +34,25 @@ public class CreatedBoardSteps {
         createNewBoard();
     }
 
+    @When("I create new board with name was started at {string}")
+    public void i_create_new_board_with_name_was_started_at(String name) {
+        createNewBoard(name, HttpStatus.SC_OK);
+    }
+
+    @When("I create new board with empty {string}")
+    public void i_create_new_board_with_empty(String name) throws Throwable {
+        try {
+            createNewBoard(name, HttpStatus.SC_BAD_REQUEST);
+        } catch (Exception e) {
+            actualException = e;
+        }
+    }
+
+    @Then("I got a Exception {string}")
+    public void i_got(String Exception) throws Throwable {
+        Assertions.assertThat(actualException.toString()).isEqualTo(Exception);
+    }
+
     private void createNewBoard() {
         requestHandler.setEndpoint(TrelloUrl.BOARDS);
         requestHandler.addQueryParam("name", CommonValues.BOARD_NAME);
@@ -39,5 +61,25 @@ public class CreatedBoardSteps {
         Assertions.assertThat(responseHandler.getStatusCode()).isEqualTo(HttpStatus.SC_OK);
 
         context.addBoards(CommonValues.BOARD_NAME, responseHandler.getId());
+    }
+
+    private void createNewBoard(String name, int statusCode) {
+        requestHandler.setEndpoint(TrelloUrl.BOARDS);
+        requestHandler.addQueryParam("name", name);
+
+        responseHandler.setResponse(createBoardRequest.createBoard(requestHandler));
+        Assertions.assertThat(responseHandler.getStatusCode()).isEqualTo(statusCode);
+
+        context.addBoards(name, responseHandler.getId());
+    }
+
+    @Then("Created coś name started at <char>")
+    public void createdCośNameStartedAtChar() {
+    }
+
+    @Then("Created coś name started at {string}")
+    public void created_coś_name_started_at(String string) {
+        // Write code here that turns the phrase above into concrete actions
+        throw new io.cucumber.java.PendingException();
     }
 }

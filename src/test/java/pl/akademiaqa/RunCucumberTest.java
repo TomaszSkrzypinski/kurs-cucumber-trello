@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
         plugin = {"pretty", "html:target/cucumber-report.html", "io.qameta.allure.cucumber6jvm.AllureCucumber6Jvm"},
         glue = {"pl.akademiaqa"},
-        features = "src/test/resources/pl.akademiaqa")
+        features = "src/test/resources/pl.akademiaqa",
+        snippets = CucumberOptions.SnippetType.UNDERSCORE)
 public class RunCucumberTest {
 }

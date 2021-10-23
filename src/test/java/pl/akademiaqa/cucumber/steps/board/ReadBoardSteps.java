@@ -37,8 +37,24 @@ public class ReadBoardSteps {
         Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.SC_NOT_FOUND);
     }
 
+    @Then("Created board name started at {string}")
+    public void created_board_name_started_at(String name) {
+
+        Response response= readBoard(name);
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.SC_OK);
+        Assertions.assertThat(response.getBody().jsonPath().getString("name")).isEqualTo(name);
+    }
+
     private Response readBoard() {
         String boardId = context.getBoards().get(CommonValues.BOARD_NAME);
+        requestHandler.setEndpoint(TrelloUrl.BOARDS);
+        requestHandler.addPathParam("id", boardId);
+
+        return readBoardRequest.readBoard(requestHandler);
+    }
+
+    private Response readBoard(String name) {
+        String boardId = context.getBoards().get(name);
         requestHandler.setEndpoint(TrelloUrl.BOARDS);
         requestHandler.addPathParam("id", boardId);
 

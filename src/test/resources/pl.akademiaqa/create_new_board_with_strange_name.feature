@@ -1,0 +1,2 @@
+Feature: Create new board
+
