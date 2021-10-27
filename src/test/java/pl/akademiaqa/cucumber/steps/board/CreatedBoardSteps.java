@@ -29,6 +29,15 @@ public class CreatedBoardSteps {
         createNewBoard();
     }
 
+    @When("I create new board without authentication")
+    public void i_create_new_board_without_authentication() {
+        try {
+        createNewBoard(CommonValues.BOARD_NAME, HttpStatus.SC_UNAUTHORIZED);
+        } catch (Exception e) {
+            actualException = e;
+        }
+    }
+
     @Given("the board already exist")
     public void the_board_already_exist() {
         createNewBoard();
@@ -48,7 +57,7 @@ public class CreatedBoardSteps {
         }
     }
 
-    @Then("I got a Exception {string}")
+    @Then("I got a {string}")
     public void i_got(String Exception) throws Throwable {
         Assertions.assertThat(actualException.toString()).isEqualTo(Exception);
     }
@@ -71,15 +80,5 @@ public class CreatedBoardSteps {
         Assertions.assertThat(responseHandler.getStatusCode()).isEqualTo(statusCode);
 
         context.addBoards(name, responseHandler.getId());
-    }
-
-    @Then("Created coś name started at <char>")
-    public void createdCośNameStartedAtChar() {
-    }
-
-    @Then("Created coś name started at {string}")
-    public void created_coś_name_started_at(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
     }
 }

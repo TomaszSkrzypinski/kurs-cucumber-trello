@@ -45,6 +45,10 @@ public class ReadBoardSteps {
         Assertions.assertThat(response.getBody().jsonPath().getString("name")).isEqualTo(name);
     }
 
+    @Then("I can't read created board details")
+    public void i_can_t_read_created_board_details() {
+    }
+
     private Response readBoard() {
         String boardId = context.getBoards().get(CommonValues.BOARD_NAME);
         requestHandler.setEndpoint(TrelloUrl.BOARDS);
