@@ -24,9 +24,9 @@ public class CreatedBoardSteps {
     private Exception actualException;
 
 
-    @When("I create new board")
-    public void i_create_new_board() {
-        createNewBoard();
+    @When("I create new board {string}")
+    public void i_create_new_board(String boardName) {
+        createNewBoard(boardName);
     }
 
     @When("I create new board without authentication")
@@ -40,7 +40,7 @@ public class CreatedBoardSteps {
 
     @Given("the board already exist")
     public void the_board_already_exist() {
-        createNewBoard();
+        createNewBoard(CommonValues.BOARD_NAME);
     }
 
     @When("I create new board with name was started at {string}")
@@ -62,14 +62,14 @@ public class CreatedBoardSteps {
         Assertions.assertThat(actualException.toString()).isEqualTo(Exception);
     }
 
-    private void createNewBoard() {
+    private void createNewBoard(String boardName) {
         requestHandler.setEndpoint(TrelloUrl.BOARDS);
-        requestHandler.addQueryParam("name", CommonValues.BOARD_NAME);
+        requestHandler.addQueryParam("name", boardName);
 
         responseHandler.setResponse(createBoardRequest.createBoard(requestHandler));
         Assertions.assertThat(responseHandler.getStatusCode()).isEqualTo(HttpStatus.SC_OK);
 
-        context.addBoards(CommonValues.BOARD_NAME, responseHandler.getId());
+        context.addBoards(boardName, responseHandler.getId());
     }
 
     private void createNewBoard(String name, int statusCode) {

@@ -49,6 +49,12 @@ public class ReadBoardSteps {
     public void i_can_t_read_created_board_details() {
     }
 
+    @Then("I see new board name {string}")
+    public void i_see_new_board_name(String boardName) {
+        Response response = readBoard(CommonValues.BOARD_NAME);
+        Assertions.assertThat(response.getBody().jsonPath().getString("name")).isEqualTo(boardName);
+    }
+
     private Response readBoard() {
         String boardId = context.getBoards().get(CommonValues.BOARD_NAME);
         requestHandler.setEndpoint(TrelloUrl.BOARDS);
@@ -64,4 +70,5 @@ public class ReadBoardSteps {
 
         return readBoardRequest.readBoard(requestHandler);
     }
+
 }
