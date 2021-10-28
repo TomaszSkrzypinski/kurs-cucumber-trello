@@ -6,7 +6,7 @@ import io.cucumber.java.en.When;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.HttpStatus;
 import org.assertj.core.api.Assertions;
-import pl.akademiaqa.api.trello.boards.CreateBoardRequest;
+import pl.akademiaqa.api.trello.CreateRequest;
 import pl.akademiaqa.common.CommonValues;
 import pl.akademiaqa.handlers.api.RequestHandler;
 import pl.akademiaqa.handlers.api.ResponseHandler;
@@ -16,7 +16,7 @@ import pl.akademiaqa.url.TrelloUrl;
 @RequiredArgsConstructor
 public class CreatedBoardSteps {
 
-    private final CreateBoardRequest createBoardRequest;
+    private final CreateRequest createRequest;
     private final RequestHandler requestHandler;
     private final ResponseHandler responseHandler;
     private final Context context;
@@ -66,7 +66,7 @@ public class CreatedBoardSteps {
         requestHandler.setEndpoint(TrelloUrl.BOARDS);
         requestHandler.addQueryParam("name", boardName);
 
-        responseHandler.setResponse(createBoardRequest.createBoard(requestHandler));
+        responseHandler.setResponse(createRequest.create(requestHandler));
         Assertions.assertThat(responseHandler.getStatusCode()).isEqualTo(HttpStatus.SC_OK);
 
         context.addBoards(boardName, responseHandler.getId());
@@ -76,7 +76,7 @@ public class CreatedBoardSteps {
         requestHandler.setEndpoint(TrelloUrl.BOARDS);
         requestHandler.addQueryParam("name", name);
 
-        responseHandler.setResponse(createBoardRequest.createBoard(requestHandler));
+        responseHandler.setResponse(createRequest.create(requestHandler));
         Assertions.assertThat(responseHandler.getStatusCode()).isEqualTo(statusCode);
 
         context.addBoards(name, responseHandler.getId());

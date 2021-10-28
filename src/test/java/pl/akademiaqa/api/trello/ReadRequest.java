@@ -1,21 +1,22 @@
-package pl.akademiaqa.api.trello.boards;
+package pl.akademiaqa.api.trello;
 
 import io.restassured.response.Response;
 import lombok.RequiredArgsConstructor;
 import pl.akademiaqa.handlers.api.RequestHandler;
+
 import static io.restassured.RestAssured.given;
 
 @RequiredArgsConstructor
-public class CreateBoardRequest {
+public class ReadRequest {
 
     private final BaseRequest baseRequest;
 
-    public Response createBoard(RequestHandler requestHandler) {
+    public Response read(RequestHandler requestHandler) {
 
         return given()
-                .spec(baseRequest.requestSetup(requestHandler.getQueryParams()))
+                .spec(baseRequest.requestSetup(requestHandler.getQueryParams(), requestHandler.getPathParams()))
                 .when()
-                .post(requestHandler.getEndpoint())
+                .get(requestHandler.getEndpoint() + "{id}")
                 .then()
                 .log().ifError()
                 .extract()

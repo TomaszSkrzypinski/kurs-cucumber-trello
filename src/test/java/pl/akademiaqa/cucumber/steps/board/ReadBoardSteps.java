@@ -5,7 +5,7 @@ import io.restassured.response.Response;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.HttpStatus;
 import org.assertj.core.api.Assertions;
-import pl.akademiaqa.api.trello.boards.ReadBoardRequest;
+import pl.akademiaqa.api.trello.ReadRequest;
 import pl.akademiaqa.common.CommonValues;
 import pl.akademiaqa.handlers.api.RequestHandler;
 import pl.akademiaqa.handlers.api.ResponseHandler;
@@ -16,7 +16,7 @@ import pl.akademiaqa.url.TrelloUrl;
 public class ReadBoardSteps {
 
     private final RequestHandler requestHandler;
-    private final ReadBoardRequest readBoardRequest;
+    private final ReadRequest readBoardRequest;
     private final ResponseHandler responseHandler;
     private final Context context;
 
@@ -60,7 +60,7 @@ public class ReadBoardSteps {
         requestHandler.setEndpoint(TrelloUrl.BOARDS);
         requestHandler.addPathParam("id", boardId);
 
-        return readBoardRequest.readBoard(requestHandler);
+        return readBoardRequest.read(requestHandler);
     }
 
     private Response readBoard(String name) {
@@ -68,7 +68,7 @@ public class ReadBoardSteps {
         requestHandler.setEndpoint(TrelloUrl.BOARDS);
         requestHandler.addPathParam("id", boardId);
 
-        return readBoardRequest.readBoard(requestHandler);
+        return readBoardRequest.read(requestHandler);
     }
 
 }

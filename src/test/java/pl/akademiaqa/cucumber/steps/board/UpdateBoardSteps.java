@@ -4,7 +4,7 @@ import io.cucumber.java.en.When;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.HttpStatus;
 import org.assertj.core.api.Assertions;
-import pl.akademiaqa.api.trello.boards.UpdateBoardRequest;
+import pl.akademiaqa.api.trello.UpdateRequest;
 import pl.akademiaqa.common.CommonValues;
 import pl.akademiaqa.handlers.api.RequestHandler;
 import pl.akademiaqa.handlers.api.ResponseHandler;
@@ -16,7 +16,7 @@ public class UpdateBoardSteps {
 
     private final RequestHandler requestHandler;
     private final ResponseHandler responseHandler;
-    private final UpdateBoardRequest updateBoardRequest;
+    private final UpdateRequest updateBoardRequest;
     private final Context context;
 
     @When("I update board name {string}")
@@ -25,7 +25,7 @@ public class UpdateBoardSteps {
         requestHandler.addPathParam("id", context.getBoards().get(CommonValues.BOARD_NAME));
         requestHandler.addQueryParam("name", newBoardName);
 
-        responseHandler.setResponse(updateBoardRequest.updateBoard(requestHandler));
+        responseHandler.setResponse(updateBoardRequest.update(requestHandler));
         Assertions.assertThat(responseHandler.getStatusCode()).isEqualTo(HttpStatus.SC_OK);
     }
 }
